@@ -902,12 +902,16 @@
                    setTimeout(function() { map.fitBounds([[35.4, 6.6], [47.1, 18.6]]); }, 700);
         </script>        
 <script>
-// MODIFICA 6: filtro delle classi cliccando sulle voci della legenda
-// (da incollare subito PRIMA di </body>, in fondo a index.html)
-// Usa solo i campi visibili nei popup: RUR_DESC, IND_TXT, COMB_TXT, DTUR_TXT, AGR_KMQ
+// MODIFICA 6 (versione 2): FILTRO INCROCIATO delle classi
+// Sostituisce la versione 1 (modifica6_filtro_classi.txt): NON tenerle entrambe.
+// Da incollare subito PRIMA di </body>, in fondo a index.html.
+// Le classi spente nelle legende delle mappe ACCESE valgono per tutte le mappe:
+// restano visibili solo i comuni che soddisfano tutte le scelte.
+// Usa i campi visibili nei popup: COMUNE, RUR_DESC, IND_TXT, COMB_TXT, DTUR_TXT, AGR_KMQ
 setTimeout(function () {
   function testo(v) { return String(v == null ? '' : v).toLowerCase(); }
   function turismo(t) {
+    if (!t) return -1;
     if (t.indexOf('alto') >= 0) return 0;
     if (t.indexOf('medio') >= 0) return 1;
     if (t.indexOf('non turistic') >= 0) return 2;
@@ -923,6 +927,7 @@ setTimeout(function () {
         return -1; }},
     {nome: 'Intensità turistica', classe: function (p) {
         var t = testo(p['IND_TXT']);
+        if (!t) return -1;
         if (t.charAt(0) === 's') return parseInt(t.charAt(1), 10) - 1;
         return 5; }},
     {nome: 'Comuni rurali (C e D)', classe: function (p) {
@@ -930,13 +935,17 @@ setTimeout(function () {
     {nome: 'Aree rurali con problemi di sviluppo', classe: function (p) {
         return turismo(testo(p['DTUR_TXT'])); }},
     {nome: 'Densità di agriturismi', classe: function (p) {
+        if (p['AGR_KMQ'] == null || p['AGR_KMQ'] === '') return -1;
         var v = Number(p['AGR_KMQ']);
+        if (isNaN(v)) return -1;
         if (v === 0) return 0;
         if (v <= 3) return 1;
         if (v <= 10) return 2;
         if (v <= 20) return 3;
         return 4; }}
   ];
+
+  // trova i layer e le loro voci di legenda
   var voci = [];
   (function cerca(lista) {
     lista.forEach(function (o) {
@@ -945,31 +954,108 @@ setTimeout(function () {
     });
   })(overlaysTree);
   var etichette = document.querySelectorAll('.leaflet-control-layers label');
+
+  // unisce i dati dello stesso comune presenti nei diversi layer
+  var dati = {};
+  var attive = [];
   regole.forEach(function (r) {
     var voce = voci.find(function (o) { return o.label.indexOf(r.nome) === 0; });
     var lab = Array.prototype.find.call(etichette, function (l) {
       return l.textContent.trim().indexOf(r.nome) === 0; });
     if (!voce || !lab) return;
-    var righe = lab.querySelectorAll('table tr');
-    var tutti = voce.layer.getLayers().slice();
-    var spenta = [];
-    righe.forEach(function (riga, i) {
+    r.layer = voce.layer;
+    r.righe = lab.querySelectorAll('table tr');
+    r.spenta = [];
+    r.tutti = voce.layer.getLayers().slice();
+    var conta = {};
+    r.chiavi = r.tutti.map(function (f) {
+      var p = f.feature.properties;
+      var n = String(p['COMUNE']);
+      conta[n] = (conta[n] || 0) + 1;
+      var k = n + '#' + conta[n];
+      if (!dati[k]) dati[k] = {};
+      for (var c in p) {
+        if (p[c] != null && p[c] !== '' && dati[k][c] == null) dati[k][c] = p[c];
+      }
+      return k;
+    });
+    attive.push(r);
+  });
+  if (!attive.length) return;
+
+  // riquadro con il conteggio e il pulsante per azzerare
+  var box = document.createElement('div');
+  box.id = 'filtro-incrociato';
+  box.style.cssText = 'display:none; margin-top:6px; padding:5px 6px; border-top:1px solid #ccc;' +
+    'font:12px Arial, Helvetica, sans-serif; color:#333;';
+  var lista = document.querySelector('.leaflet-control-layers-list') ||
+              document.querySelector('.leaflet-control-layers');
+  lista.appendChild(box);
+
+  function passa(p, filtri) {
+    return filtri.every(function (q) {
+      var c = q.classe(p);
+      return !(c >= 0 && q.spenta[c]);
+    });
+  }
+
+  function applica() {
+    var filtri = attive.filter(function (r) {
+      return map.hasLayer(r.layer) && r.spenta.some(Boolean);
+    });
+    attive.forEach(function (r) {
+      r.tutti.forEach(function (f, i) {
+        var ok = passa(dati[r.chiavi[i]], filtri);
+        var presente = r.layer.hasLayer(f);
+        if (ok && !presente) r.layer.addLayer(f);
+        if (!ok && presente) r.layer.removeLayer(f);
+      });
+    });
+    if (!filtri.length) { box.style.display = 'none'; return; }
+    var chiavi = Object.keys(dati);
+    var n = chiavi.filter(function (k) { return passa(dati[k], filtri); }).length;
+    box.innerHTML = 'Comuni visibili: <b>' + n.toLocaleString('it-IT') + '</b> su ' +
+      chiavi.length.toLocaleString('it-IT') +
+      (filtri.length > 1 ? ' (filtri combinati: ' + filtri.length + ' mappe)' : '') +
+      '<br><a href="#" id="azzera-filtri">Azzera filtri</a>';
+    box.style.display = 'block';
+    document.getElementById('azzera-filtri').onclick = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      attive.forEach(function (r) {
+        r.spenta = [];
+        r.righe.forEach(function (riga) {
+          riga.style.opacity = '1';
+          riga.style.textDecoration = 'none';
+        });
+      });
+      applica();
+    };
+  }
+
+  // clic sulle voci di legenda
+  attive.forEach(function (r) {
+    r.righe.forEach(function (riga, i) {
       riga.style.cursor = 'pointer';
       riga.title = 'Clic per mostrare/nascondere questa classe';
       riga.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        spenta[i] = !spenta[i];
-        riga.style.opacity = spenta[i] ? '0.35' : '1';
-        riga.style.textDecoration = spenta[i] ? 'line-through' : 'none';
-        tutti.forEach(function (f) {
-          var visibile = !spenta[r.classe(f.feature.properties)];
-          var presente = voce.layer.hasLayer(f);
-          if (visibile && !presente) voce.layer.addLayer(f);
-          if (!visibile && presente) voce.layer.removeLayer(f);
-        });
+        r.spenta[i] = !r.spenta[i];
+        riga.style.opacity = r.spenta[i] ? '0.35' : '1';
+        riga.style.textDecoration = r.spenta[i] ? 'line-through' : 'none';
+        applica();
       });
     });
+  });
+
+  // quando si accende o spegne una mappa, i filtri si ricalcolano
+  var inAttesa = false;
+  map.on('layeradd layerremove', function (e) {
+    var giusto = attive.some(function (r) { return r.layer === e.layer; });
+    if (!giusto || inAttesa) return;
+    inAttesa = true;
+    setTimeout(function () { inAttesa = false; applica(); }, 50);
   });
 }, 1000);
 </script>
@@ -982,6 +1068,7 @@ setTimeout(function () {
     <ul>
       <li>Accendi <b>una mappa alla volta</b> dall'elenco dei livelli in alto a destra: sotto la mappa accesa compare la sua legenda.</li>
       <li>Clicca su una <b>voce della legenda</b> per nascondere o mostrare quella classe; puoi nasconderne più di una.</li>
+         <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte (es. aree D <i>e</i> oltre 20 agriturismi ogni 100 km²). "Azzera filtri" li toglie tutti.</li>
       <li>Clicca su un <b>comune</b> per vedere i dati; usa la rotella o i pulsanti + e − per lo zoom.</li>
     </ul>
     <p>Fonti</p>
