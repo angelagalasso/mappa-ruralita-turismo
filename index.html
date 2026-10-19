@@ -1128,5 +1128,57 @@ setTimeout(function () {
   })(overlaysTree);
 }, 1000);
 </script>
+<!-- MODIFICA 9: dati degli agriturismi nel popup di TUTTE le mappe -->
+<!-- (da incollare subito PRIMA di </body>, dopo la modifica 8) -->
+<!-- Usa il popup del layer "Densità di agriturismi", che contiene tutti i campi,
+     anche per i comuni delle altre quattro mappe. -->
+<script>
+setTimeout(function () {
+  var voci = [];
+  (function cerca(lista) {
+    lista.forEach(function (o) {
+      if (o.layer && o.layer.getLayers) voci.push(o);
+      if (o.children) cerca(o.children);
+    });
+  })(overlaysTree);
+  var agri = voci.find(function (o) { return o.label.indexOf('Densità di agriturismi') === 0; });
+  if (!agri) return;
+
+  function chiavi(layer) {
+    var conta = {};
+    return layer.getLayers().map(function (f) {
+      var n = String(f.feature.properties['COMUNE']);
+      conta[n] = (conta[n] || 0) + 1;
+      return n + '#' + conta[n];
+    });
+  }
+
+  // popup e dati agriturismi per ogni comune
+  var popupAgri = {}, datiAgri = {};
+  var fa = agri.layer.getLayers();
+  chiavi(agri.layer).forEach(function (k, i) {
+    var pop = fa[i].getPopup && fa[i].getPopup();
+    if (pop) popupAgri[k] = pop.getContent();
+    datiAgri[k] = fa[i].feature.properties;
+  });
+
+  voci.forEach(function (o) {
+    if (o === agri) return;
+    var ff = o.layer.getLayers();
+    chiavi(o.layer).forEach(function (k, i) {
+      var f = ff[i];
+      if (popupAgri[k] != null && f.getPopup && f.getPopup()) {
+        f.setPopupContent(popupAgri[k]);
+      }
+      var p = f.feature.properties, a = datiAgri[k];
+      if (a) {
+        ['AGR_N', 'AGR_KMQ', 'AGR_10K', 'AGR_NOTA'].forEach(function (c) {
+          if (p[c] == null && a[c] != null) p[c] = a[c];
+        });
+      }
+    });
+  });
+}, 1200);
+</script>
 </body>
 </html>
