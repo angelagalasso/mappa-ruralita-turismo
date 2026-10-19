@@ -973,5 +973,46 @@ setTimeout(function () {
   });
 }, 1000);
 </script>
+<!-- MODIFICA 7: riquadro "Guida e fonti" in basso a sinistra -->
+<!-- (da incollare subito PRIMA di </body>, dopo la modifica 6) -->
+<div id="guida-mappa">
+  <details>
+    <summary>Guida e fonti</summary>
+    <p>Come usare la mappa</p>
+    <ul>
+      <li>Accendi <b>una mappa alla volta</b> dall'elenco dei livelli in alto a destra: sotto la mappa accesa compare la sua legenda.</li>
+      <li>Clicca su una <b>voce della legenda</b> per nascondere o mostrare quella classe; puoi nasconderne più di una.</li>
+      <li>Clicca su un <b>comune</b> per vedere i dati; usa la rotella o i pulsanti + e − per lo zoom.</li>
+    </ul>
+    <p>Fonti</p>
+    <ul>
+      <li>Aree rurali: Rete Rurale Nazionale, classificazione aree rurali PSN 2014-2020.</li>
+      <li>Turismo: ISTAT, classificazione dei comuni per categoria turistica e densità turistica (comuni al 1/1/2019).</li>
+      <li>Agriturismi: ISTAT, agriturismi autorizzati per comune (2024).</li>
+      <li>Confini comunali e regionali: ISTAT, 1/1/2019. Per i comuni fusi dopo il 2019 il dato è indicato nelle note del popup.</li>
+    </ul>
+    <p class="firma">Elaborazione: Angela Galasso</p>
+  </details>
+</div>
+<style>
+#guida-mappa {
+  position: fixed; left: 10px; bottom: 22px; z-index: 1001;
+  max-width: 330px; padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.95); color: #333;
+  border-radius: 6px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+  font: 12px/1.4 Arial, Helvetica, sans-serif;
+}
+#guida-mappa summary { cursor: pointer; font-weight: bold; font-size: 13px; }
+#guida-mappa p { margin: 7px 0 2px; font-weight: bold; }
+#guida-mappa ul { margin: 0; padding-left: 16px; }
+#guida-mappa li { margin-bottom: 2px; }
+#guida-mappa .firma { font-weight: normal; font-style: italic; margin-top: 6px; }
+@media (max-width: 650px) { #guida-mappa { max-width: calc(100% - 20px); } }
+</style>
+<script>
+if (window.innerWidth < 650) {
+  document.querySelector('#guida-mappa details').removeAttribute('open');
+}
+</script>
 </body>
 </html>
