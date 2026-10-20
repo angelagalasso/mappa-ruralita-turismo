@@ -834,7 +834,6 @@
         {label: '<b>Mappe</b>',  selectAllCheckbox: true, children: [
             {label: 'Aree rurali (PSN 2014-2020)<br /><table><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_APoliurbani0.png" /></td><td>A - Poli urbani</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_BAgricolturaintensiva1.png" /></td><td>B - Agricoltura intensiva</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_CRuraliintermedie2.png" /></td><td>C - Rurali intermedie</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_DRuraliconproblemidisviluppo3.png" /></td><td>D - Rurali con problemi di sviluppo</td></tr></table>', layer: layer_AreeruraliPSN20142020_4},
             {label: 'Intensità turistica (ISTAT, quintili)<br /><table><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S1bassa0.png" /></td><td>S1 (bassa)</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S21.png" /></td><td>S2</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S32.png" /></td><td>S3</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S43.png" /></td><td>S4</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S5alta4.png" /></td><td>S5 (alta)</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_NTNonturistico5.png" /></td><td>NT - Non turistico</td></tr></table>', layer: layer_IntensitturisticaISTATquintili_3},
-            {label: 'Comuni rurali (C e D) per intensità turistica<br /><table><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruraliturismoalto0.png" /></td><td>Rurali - turismo alto</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruraliturismomediobasso1.png" /></td><td>Rurali - turismo medio-basso</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruralinonturistici2.png" /></td><td>Rurali - non turistici</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_PoliurbanieareeadagricolturaintensivaAeB3.png" /></td><td>Poli urbani e aree ad agricoltura intensiva (A e B)</td></tr></table>', layer: layer_ComuniruraliCeDperintensitturistica_2},
             {label: 'Densità di agriturismi per 100 km² (ISTAT 2024)<br /><table><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Nessunagriturismo0.png" /></td><td>Nessun agriturismo</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Finoa31.png" /></td><td>fino a 3</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_3102.png" /></td><td>oltre 3 fino a 10</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_10203.png" /></td><td>oltre 10 fino a 20</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Oltre204.png" /></td><td>oltre 20</td></tr></table>', layer: layer_DensitdiagriturismiISTAT2024_0},]},]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
@@ -1064,10 +1063,10 @@ setTimeout(function () {
     <summary>Guida e fonti</summary>
     <p>Come usare la mappa</p>
     <ul>
-      <li>Accendi <b>una mappa alla volta</b> dall'elenco dei livelli in alto a destra: sotto la mappa accesa compare la sua legenda.</li>
+      <li>All'apertura si vedono i cerchi del <b>Numero di agriturismi per comune</b> (area del cerchio proporzionale al numero): passa o clicca su un cerchio per nome e dati del comune.</li>
+      <li>Accendi una <b>mappa</b> dall'elenco dei livelli in alto a destra: sotto compare la sua legenda. I cerchi restano sopra la mappa e si spengono dalla casella in fondo all'elenco.</li>
       <li>Clicca su una <b>voce della legenda</b> per nascondere o mostrare quella classe; puoi nasconderne più di una.</li>
-      <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte (es. aree D <i>e</i> oltre 20 agriturismi ogni 100 km²). "Azzera filtri" li toglie tutti. La mappa dei comuni rurali per intensità turistica è una combinazione già pronta; con i filtri puoi crearne altre (es. solo aree D: accendi anche le Aree rurali e lascia attiva solo la D).</li>
-      <li>All'apertura si vedono i cerchi del <b>Numero di agriturismi per comune</b> (area del cerchio proporzionale al numero): passa o clicca su un cerchio per nome e dati del comune; i cerchi restano sopra qualsiasi mappa accesa e si spengono dalla casella in fondo all'elenco.</li>
+      <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte. Esempio: accendi <i>Aree rurali</i> (lascia solo C e D) e <i>Intensità turistica</i> (lascia solo S4 e S5) per vedere i comuni rurali ad alto turismo. "Azzera filtri" li toglie tutti.</li>
       <li>Clicca su un <b>comune</b> per vedere i dati; usa la rotella o i pulsanti + e − per lo zoom.</li>
     </ul>
     <p>Fonti</p>
@@ -1138,7 +1137,11 @@ setTimeout(function () {
 <!-- MODIFICA 9: dati degli agriturismi nel popup di TUTTE le mappe -->
 <!-- (da incollare subito PRIMA di </body>, dopo la modifica 8) -->
 <!-- Usa il popup del layer "Densità di agriturismi", che contiene tutti i campi,
-     anche per i comuni delle altre quattro mappe. -->
+     anche per i comuni delle altre mappe, e lo rende più leggibile:
+     nome del comune in evidenza, lettera della classe di ruralità (A-D),
+     "bassa"/"alta" per S1/S5, virgola decimale, popolazione 2019 indicata,
+     tolte le voci "Aree D per intensità turistica" e "Comuni rurali (C e D)
+     per intensità turistica" (mappe non più presenti sul web). -->
 <script>
 setTimeout(function () {
   var voci = [];
@@ -1160,12 +1163,65 @@ setTimeout(function () {
     });
   }
 
+  // rende il popup più chiaro (lavora sul testo delle etichette, non sui campi)
+  // funziona sia con etichetta <strong> nella stessa cella, sia con <th> in riga separata
+  function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function pulisci(html) {
+    if (typeof html !== 'string') return html;
+    var box = document.createElement('div');
+    box.innerHTML = html;
+    var righe = Array.prototype.slice.call(box.querySelectorAll('tr'));
+    var lettere = [['poli urbani', 'A'], ['intensiva', 'B'], ['intermedie', 'C'], ['problemi di sviluppo', 'D']];
+    righe.forEach(function (r, i) {
+      if (!r.parentNode) return;
+      var td = r.querySelector('td'), th = r.querySelector('th'), lab = null, et, v, scrivi, togli;
+      if (td && td.querySelector('strong')) {            // etichetta e valore nella stessa cella
+        lab = td.querySelector('strong');
+        et = lab.textContent.trim();
+        v = td.textContent.trim().slice(lab.textContent.trim().length).trim();
+        scrivi = function (nuovaEt, nuovoV) {
+          td.innerHTML = '<strong>' + esc(nuovaEt) + '</strong><br />' + esc(nuovoV);
+        };
+        togli = function () { r.parentNode.removeChild(r); };
+      } else if (th) {                                    // etichetta in riga, valore nella riga dopo
+        var rv = righe[i + 1], tdv = rv && rv.querySelector('td');
+        if (!tdv) return;
+        et = th.textContent.trim();
+        v = tdv.textContent.trim();
+        scrivi = function (nuovaEt, nuovoV) { th.textContent = nuovaEt; tdv.textContent = nuovoV; };
+        togli = function () { r.parentNode.removeChild(r); if (rv.parentNode) rv.parentNode.removeChild(rv); };
+      } else {
+        // riga senza etichetta: il nome del comune (prima riga) in evidenza
+        if (i === 0 && td) td.innerHTML = '<span style="font-size:14px;font-weight:bold">' + esc(td.textContent.trim()) + '</span>';
+        return;
+      }
+      if (et.indexOf('Aree D per intensit') === 0 || et.indexOf('Comuni rurali (C e D)') === 0) { togli(); return; }
+      var nuovaEt = et, nuovoV = v;
+      if (et.indexOf('Classe di ruralit') === 0 && v.charAt(1) !== ' ') {
+        lettere.forEach(function (l) { if (v.toLowerCase().indexOf(l[0]) >= 0) nuovoV = l[1] + ' - ' + v; });
+      }
+      if (et.indexOf('Indice di sintesi') === 0) {
+        if (v === 'S1') nuovoV = 'S1 (bassa)';
+        if (v === 'S5') nuovoV = 'S5 (alta)';
+      }
+      if (et.indexOf('Agriturismi per') === 0) nuovoV = v.replace('.', ',');
+      if (et.indexOf('Agriturismi per 10.000 abitanti') === 0 && et.indexOf('2019') < 0) {
+        nuovaEt = et + ' (popolazione 2019)';
+      }
+      if (nuovaEt !== et || nuovoV !== v) scrivi(nuovaEt, nuovoV);
+    });
+    return box.innerHTML;
+  }
+
   // popup e dati agriturismi per ogni comune
   var popupAgri = {}, datiAgri = {};
   var fa = agri.layer.getLayers();
   chiavi(agri.layer).forEach(function (k, i) {
     var pop = fa[i].getPopup && fa[i].getPopup();
-    if (pop) popupAgri[k] = pop.getContent();
+    if (pop) {
+      popupAgri[k] = pulisci(pop.getContent());
+      fa[i].setPopupContent(popupAgri[k]);
+    }
     datiAgri[k] = fa[i].feature.properties;
   });
 
