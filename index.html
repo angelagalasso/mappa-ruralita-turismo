@@ -1068,7 +1068,7 @@ setTimeout(function () {
       <li>Accendi <b>una mappa alla volta</b> dall'elenco dei livelli in alto a destra: sotto la mappa accesa compare la sua legenda.</li>
       <li>Clicca su una <b>voce della legenda</b> per nascondere o mostrare quella classe; puoi nasconderne più di una.</li>
       <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte (es. aree D <i>e</i> oltre 20 agriturismi ogni 100 km²). "Azzera filtri" li toglie tutti. La mappa dei comuni rurali per intensità turistica è una combinazione già pronta; con i filtri puoi crearne altre (es. solo aree D: accendi anche le Aree rurali e lascia attiva solo la D).</li>
-      <li>Spunta <b>Numero di agriturismi (cerchi)</b>, in fondo all'elenco, per vedere quanti agriturismi ha ogni comune sopra qualsiasi mappa (area del cerchio proporzionale al numero).</li>
+      <li>Spunta <b>Numero di agriturismi per comune</b>, in fondo all'elenco, per vedere quanti agriturismi ha ogni comune sopra qualsiasi mappa (area del cerchio proporzionale al numero).</li>
       <li>Clicca su un <b>comune</b> per vedere i dati; usa la rotella o i pulsanti + e − per lo zoom.</li>
     </ul>
     <p>Fonti</p>
@@ -1187,7 +1187,7 @@ setTimeout(function () {
 </script>
 <!-- MODIFICA 11: agriturismi come CERCHI sovrapponibili a qualsiasi mappa -->
 <!-- (da incollare subito PRIMA di </body>, dopo la modifica 9) -->
-<!-- Aggiunge in fondo all'elenco dei livelli la casella "Numero di agriturismi (cerchi)":
+<!-- Aggiunge in fondo all'elenco dei livelli la casella "Numero di agriturismi per comune (ISTAT 2024)":
      un cerchio per ogni comune con almeno un agriturismo, con AREA proporzionale
      al NUMERO di agriturismi (AGR_N). Si vede sopra la mappa accesa e rispetta i filtri.
      Colore unico blu scuro, valido per tutte le mappe.
@@ -1196,11 +1196,7 @@ setTimeout(function () {
 #cerchi-agri { margin-top: 6px; padding: 5px 6px; border-top: 1px solid #ccc;
   font: 12px Arial, Helvetica, sans-serif; color: #333; }
 #cerchi-agri label { cursor: pointer; font-weight: bold; }
-#cerchi-agri .leg { display: none; margin: 4px 0 0 20px; }
-#cerchi-agri .leg div { display: flex; align-items: center; min-height: 15px; margin: 1px 0; }
-#cerchi-agri .leg span { display: inline-flex; justify-content: center; align-items: center; width: 32px; margin-right: 5px; }
-#cerchi-agri .leg i { display: inline-block; border-radius: 50%;
-  background: rgba(8, 48, 107, 0.75); border: 1px solid #fff; box-shadow: 0 0 0 1px #08306b; }
+#cerchi-agri .leg { display: none; margin: 4px 0 0 20px; line-height: 1.35; }
 </style>
 <script>
 setTimeout(function () {
@@ -1295,18 +1291,30 @@ setTimeout(function () {
     setTimeout(function () { inAttesa = false; aggiorna(); }, 80);
   });
 
+  // legenda: cerchi annidati di riferimento (stessa scala della mappa)
+  function legendaCerchi() {
+    var valori = [100, 25, 5], rMax = raggio(valori[0]);
+    var passo = 15, base = Math.max(2 * rMax + 6, valori.length * passo + 4);
+    var cx = rMax + 2, xGomito = 2 * rMax + 10, xTesto = 2 * rMax + 26;
+    var svg = '<svg width="' + (xTesto + 100) + '" height="' + (base + 3) + '" style="display:block;margin-top:6px">';
+    valori.forEach(function (n, k) {
+      var r = raggio(n), top = base - 2 * r, yTesto = 11 + k * passo;
+      svg += '<circle cx="' + cx + '" cy="' + (base - r) + '" r="' + r + '" fill="rgba(8,48,107,0.65)" stroke="#fff" stroke-width="0.8"/>';
+      svg += '<polyline points="' + cx + ',' + top + ' ' + xGomito + ',' + top + ' ' + (xTesto - 4) + ',' + (yTesto - 4) +
+             '" fill="none" stroke="#777" stroke-width="0.7"/>';
+      svg += '<text x="' + xTesto + '" y="' + yTesto + '" font-size="11" font-family="Arial, Helvetica, sans-serif" fill="#333">' +
+             n + ' agriturismi</text>';
+    });
+    return svg + '</svg>';
+  }
+
   // casella in fondo all'elenco dei livelli
   var box = document.createElement('div');
   box.id = 'cerchi-agri';
   box.innerHTML =
-    '<label><input type="checkbox" id="cerchi-agri-on"> Numero di agriturismi (cerchi) sopra la mappa accesa</label>' +
-    '<div class="leg">Numero di agriturismi per comune (ISTAT 2024)' +
-    [1, 10, 50, 200].map(function (n) {
-      var d = Math.max(2, Math.round(2 * raggio(n)));
-      return '<div><span><i style="width:' + d + 'px;height:' + d + 'px"></i></span>' + n + '</div>';
-    }).join('') +
-    '<div style="font-style:italic">area del cerchio proporzionale al numero; ' +
-    'senza cerchio: nessun agriturismo (o comune fuso dopo il 2019, vedi popup)</div></div>';
+    '<label><input type="checkbox" id="cerchi-agri-on"> Numero di agriturismi per comune (ISTAT 2024)</label>' +
+    '<div class="leg">Area del cerchio proporzionale al numero' +
+    legendaCerchi() + '</div>';
   var lista = document.querySelector('.leaflet-control-layers-list') ||
               document.querySelector('.leaflet-control-layers');
   lista.appendChild(box);
