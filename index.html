@@ -836,7 +836,6 @@
             {label: 'Aree rurali (PSN 2014-2020)<br /><table><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_APoliurbani0.png" /></td><td>A - Poli urbani</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_BAgricolturaintensiva1.png" /></td><td>B - Agricoltura intensiva</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_CRuraliintermedie2.png" /></td><td>C - Rurali intermedie</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliPSN20142020_4_DRuraliconproblemidisviluppo3.png" /></td><td>D - Rurali con problemi di sviluppo</td></tr></table>', layer: layer_AreeruraliPSN20142020_4},
             {label: 'Intensità turistica (ISTAT, quintili)<br /><table><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S1bassa0.png" /></td><td>S1 (bassa)</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S21.png" /></td><td>S2</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S32.png" /></td><td>S3</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S43.png" /></td><td>S4</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_S5alta4.png" /></td><td>S5 (alta)</td></tr><tr><td style="text-align: center;"><img src="legend/IntensitturisticaISTATquintili_3_NTNonturistico5.png" /></td><td>NT - Non turistico</td></tr></table>', layer: layer_IntensitturisticaISTATquintili_3},
             {label: 'Comuni rurali (C e D) per intensità turistica<br /><table><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruraliturismoalto0.png" /></td><td>Rurali - turismo alto</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruraliturismomediobasso1.png" /></td><td>Rurali - turismo medio-basso</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_Ruralinonturistici2.png" /></td><td>Rurali - non turistici</td></tr><tr><td style="text-align: center;"><img src="legend/ComuniruraliCeDperintensitturistica_2_PoliurbanieareeadagricolturaintensivaAeB3.png" /></td><td>Poli urbani e aree ad agricoltura intensiva (A e B)</td></tr></table>', layer: layer_ComuniruraliCeDperintensitturistica_2},
-            {label: 'Aree rurali con problemi di sviluppo (D) per intensità turistica<br /><table><tr><td style="text-align: center;"><img src="legend/AreeruraliconproblemidisviluppoDperintensitturistica_1_Turismoalto0.png" /></td><td>Turismo alto</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliconproblemidisviluppoDperintensitturistica_1_Turismomediobasso1.png" /></td><td>Turismo medio-basso</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliconproblemidisviluppoDperintensitturistica_1_Nonturistici2.png" /></td><td>Non turistici</td></tr><tr><td style="text-align: center;"><img src="legend/AreeruraliconproblemidisviluppoDperintensitturistica_1_AltricomuniareeABC3.png" /></td><td>Altri comuni (aree A, B, C)</td></tr></table>', layer: layer_AreeruraliconproblemidisviluppoDperintensitturistica_1},
             {label: 'Densità di agriturismi per 100 km² (ISTAT 2024)<br /><table><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Nessunagriturismo0.png" /></td><td>Nessun agriturismo</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Finoa31.png" /></td><td>fino a 3</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_3102.png" /></td><td>oltre 3 fino a 10</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_10203.png" /></td><td>oltre 10 fino a 20</td></tr><tr><td style="text-align: center;"><img src="legend/DensitdiagriturismiISTAT2024_0_Oltre204.png" /></td><td>oltre 20</td></tr></table>', layer: layer_DensitdiagriturismiISTAT2024_0},]},]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
@@ -1062,13 +1061,14 @@ setTimeout(function () {
 <!-- MODIFICA 7: riquadro "Guida e fonti" in basso a sinistra -->
 <!-- (da incollare subito PRIMA di </body>, dopo la modifica 6) -->
 <div id="guida-mappa">
-  <details>
+  <details open>
     <summary>Guida e fonti</summary>
     <p>Come usare la mappa</p>
     <ul>
       <li>Accendi <b>una mappa alla volta</b> dall'elenco dei livelli in alto a destra: sotto la mappa accesa compare la sua legenda.</li>
       <li>Clicca su una <b>voce della legenda</b> per nascondere o mostrare quella classe; puoi nasconderne più di una.</li>
-         <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte (es. aree D <i>e</i> oltre 20 agriturismi ogni 100 km²). "Azzera filtri" li toglie tutti. Le mappe 3 e 4 sono combinazioni già pronte di ruralità e turismo; con i filtri puoi crearne altre.</li>
+      <li>Se accendi più mappe, i filtri si <b>combinano</b>: restano visibili solo i comuni che soddisfano tutte le scelte (es. aree D <i>e</i> oltre 20 agriturismi ogni 100 km²). "Azzera filtri" li toglie tutti. La mappa dei comuni rurali per intensità turistica è una combinazione già pronta; con i filtri puoi crearne altre (es. solo aree D: accendi anche le Aree rurali e lascia attiva solo la D).</li>
+      <li>Spunta <b>Numero di agriturismi (cerchi)</b>, in fondo all'elenco, per vedere quanti agriturismi ha ogni comune sopra qualsiasi mappa (area del cerchio proporzionale al numero).</li>
       <li>Clicca su un <b>comune</b> per vedere i dati; usa la rotella o i pulsanti + e − per lo zoom.</li>
     </ul>
     <p>Fonti</p>
@@ -1184,6 +1184,139 @@ setTimeout(function () {
     });
   });
 }, 1200);
+</script>
+<!-- MODIFICA 11: agriturismi come CERCHI sovrapponibili a qualsiasi mappa -->
+<!-- (da incollare subito PRIMA di </body>, dopo la modifica 9) -->
+<!-- Aggiunge in fondo all'elenco dei livelli la casella "Numero di agriturismi (cerchi)":
+     un cerchio per ogni comune con almeno un agriturismo, con AREA proporzionale
+     al NUMERO di agriturismi (AGR_N). Si vede sopra la mappa accesa e rispetta i filtri.
+     Colore unico blu scuro, valido per tutte le mappe.
+     Comuni fusi dopo il 2019 (AGR_N vuoto): nessun cerchio, dato nel popup. -->
+<style>
+#cerchi-agri { margin-top: 6px; padding: 5px 6px; border-top: 1px solid #ccc;
+  font: 12px Arial, Helvetica, sans-serif; color: #333; }
+#cerchi-agri label { cursor: pointer; font-weight: bold; }
+#cerchi-agri .leg { display: none; margin: 4px 0 0 20px; }
+#cerchi-agri .leg div { display: flex; align-items: center; min-height: 15px; margin: 1px 0; }
+#cerchi-agri .leg span { display: inline-flex; justify-content: center; align-items: center; width: 32px; margin-right: 5px; }
+#cerchi-agri .leg i { display: inline-block; border-radius: 50%;
+  background: rgba(8, 48, 107, 0.75); border: 1px solid #fff; box-shadow: 0 0 0 1px #08306b; }
+</style>
+<script>
+setTimeout(function () {
+  var voci = [];
+  (function cerca(lista) {
+    lista.forEach(function (o) {
+      if (o.layer && o.layer.getLayers) voci.push(o);
+      if (o.children) cerca(o.children);
+    });
+  })(overlaysTree);
+  var agri = voci.find(function (o) { return o.label.indexOf('Densità di agriturismi') === 0; });
+  if (!agri) return;
+
+  function chiavi(layer) {
+    var conta = {};
+    return layer.getLayers().map(function (f) {
+      var n = String(f.feature.properties['COMUNE']);
+      conta[n] = (conta[n] || 0) + 1;
+      return n + '#' + conta[n];
+    });
+  }
+  // baricentro dell'anello più grande del poligono
+  function centro(geom) {
+    var poli = geom.type === 'Polygon' ? [geom.coordinates] : geom.coordinates;
+    var best = null, bestA = -1;
+    poli.forEach(function (p) {
+      var r = p[0], a = 0, cx = 0, cy = 0;
+      for (var i = 0, j = r.length - 1; i < r.length; j = i++) {
+        var k = r[j][0] * r[i][1] - r[i][0] * r[j][1];
+        a += k; cx += (r[j][0] + r[i][0]) * k; cy += (r[j][1] + r[i][1]) * k;
+      }
+      if (Math.abs(a) > bestA && a !== 0) { bestA = Math.abs(a); best = [cy / (3 * a), cx / (3 * a)]; }
+    });
+    return best;
+  }
+  // area del cerchio proporzionale al numero: raggio = K * radice(numero)
+  var K = 1.0;   // per cerchi più grandi o più piccoli cambiare questo valore
+  function raggio(n) { return K * Math.sqrt(n); }
+
+  if (!map.getPane('paneCerchi')) {
+    map.createPane('paneCerchi');
+    map.getPane('paneCerchi').style.zIndex = 640;
+    map.getPane('paneCerchi').style.pointerEvents = 'none';
+  }
+  var tela = L.canvas({padding: 0.5, pane: 'paneCerchi'});
+  var gruppo = L.layerGroup();
+  var cerchi = [];   // {cerchio, chiave}
+  var fa = agri.layer.getLayers();
+  var elenco = [];
+  chiavi(agri.layer).forEach(function (k, i) {
+    var p = fa[i].feature.properties;
+    if (p['AGR_N'] == null || p['AGR_N'] === '') return;
+    var n = Number(p['AGR_N']);
+    if (!(n > 0)) return;
+    var c = centro(fa[i].feature.geometry);
+    if (c) elenco.push({n: n, c: c, k: k});
+  });
+  // prima i cerchi grandi, poi i piccoli (così i piccoli restano visibili sopra)
+  elenco.sort(function (a, b) { return b.n - a.n; });
+  elenco.forEach(function (e) {
+    var cerchio = L.circleMarker(e.c, {
+      renderer: tela, pane: 'paneCerchi', radius: raggio(e.n), interactive: false,
+      color: '#ffffff', weight: 0.6, fillColor: '#08306b', fillOpacity: 0.65
+    });
+    cerchi.push({cerchio: cerchio, chiave: e.k});
+    gruppo.addLayer(cerchio);
+  });
+
+  // per ogni layer di comuni: chiave -> poligono (per rispettare i filtri)
+  var mappe = voci.filter(function (o) { return o.layer.getLayers().length > 100; }).map(function (o) {
+    var idx = {}, ff = o.layer.getLayers();
+    chiavi(o.layer).forEach(function (k, i) { idx[k] = ff[i]; });
+    return {layer: o.layer, idx: idx};
+  });
+  function aggiorna() {
+    if (!map.hasLayer(gruppo)) return;
+    var accese = mappe.filter(function (m) { return map.hasLayer(m.layer); });
+    cerchi.forEach(function (c) {
+      var ok = accese.every(function (m) {
+        var f = m.idx[c.chiave];
+        return !f || m.layer.hasLayer(f);
+      });
+      var presente = gruppo.hasLayer(c.cerchio);
+      if (ok && !presente) gruppo.addLayer(c.cerchio);
+      if (!ok && presente) gruppo.removeLayer(c.cerchio);
+    });
+  }
+  var inAttesa = false;
+  map.on('layeradd layerremove', function (e) {
+    if (inAttesa || e.layer === gruppo || e.layer instanceof L.CircleMarker) return;
+    inAttesa = true;
+    setTimeout(function () { inAttesa = false; aggiorna(); }, 80);
+  });
+
+  // casella in fondo all'elenco dei livelli
+  var box = document.createElement('div');
+  box.id = 'cerchi-agri';
+  box.innerHTML =
+    '<label><input type="checkbox" id="cerchi-agri-on"> Numero di agriturismi (cerchi) sopra la mappa accesa</label>' +
+    '<div class="leg">Numero di agriturismi per comune (ISTAT 2024)' +
+    [1, 10, 50, 200].map(function (n) {
+      var d = Math.max(2, Math.round(2 * raggio(n)));
+      return '<div><span><i style="width:' + d + 'px;height:' + d + 'px"></i></span>' + n + '</div>';
+    }).join('') +
+    '<div style="font-style:italic">area del cerchio proporzionale al numero; ' +
+    'senza cerchio: nessun agriturismo (o comune fuso dopo il 2019, vedi popup)</div></div>';
+  var lista = document.querySelector('.leaflet-control-layers-list') ||
+              document.querySelector('.leaflet-control-layers');
+  lista.appendChild(box);
+  L.DomEvent.disableClickPropagation(box);
+  document.getElementById('cerchi-agri-on').addEventListener('change', function () {
+    box.querySelector('.leg').style.display = this.checked ? 'block' : 'none';
+    if (this.checked) { gruppo.addTo(map); aggiorna(); }
+    else { map.removeLayer(gruppo); }
+  });
+}, 1300);
 </script>
 </body>
 </html>
